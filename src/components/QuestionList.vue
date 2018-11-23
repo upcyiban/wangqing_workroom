@@ -26,7 +26,7 @@
             </div>
         </div>
         <div id="input">
-            <pre><span>{{text}}</span><br></pre>
+            <p>{{text}}</p>
             <textarea v-model="text"></textarea>
             <div id="button" @click="addMessage"><p>发送</p></p></div>
         </div>
@@ -43,69 +43,77 @@ export default {
             selfName: '鱼',
             text: '',
             messages: [
-                {
-                    self: false,
-                    name: '鱼',
-                    avatar: require('@/assets/8.jpg'),
-                    time: '2018年10月11日 8:23',
-                    body: '一场大规模的恐怖袭击，一个牵扯无数内幕的神秘组织，这个关乎整个东京的可怕计划即将拉开帷幕…首脑云集的东京峰会举办在即，会场突然发生超大规模的爆炸事件，不仅在现场发现行踪诡异的安室透，毛利小五郎更是惨遭陷害。面对最危险任务，最烧脑的推理，最艰难的博弈，柯南能否在迷雾中寻找到唯一的真相。'
-                },
-                {
-                    self: true,
-                    name: '鱼',
-                    avatar: require('@/assets/8.jpg'),
-                    time: '2018年10月11日 8:23',
-                    body: '刚满15岁的高中生秋月孝雄，因母亲离家出走，不得不为了生计打工赚钱。入梅之日，孝雄逃课来到一座日本庭园。安静的小亭子里，27岁的职场女性雪野百香里边吃巧克力、边喝啤酒的样子引起了他的注意。对彼此感到似曾相识的二人，每到落雨之日便从世俗的烦恼中逃脱出来，相会于这座都市丛林中的幽静角落。在梅雨季节，他们的心渐渐互相靠拢。志愿成为手工鞋匠的秋月，决心为雪野做一双鞋。雨过天晴，艳阳高照，庭园中久久不见两人的身影……'
-                }
+                // {
+                //     self: false,
+                //     name: '鱼',
+                //     avatar: require('@/assets/8.jpg'),
+                //     time: '2018年10月11日 8:23',
+                //     body: '一场大规模的恐怖袭击，一个牵扯无数内幕的神秘组织，这个关乎整个东京的可怕计划即将拉开帷幕…首脑云集的东京峰会举办在即，会场突然发生超大规模的爆炸事件，不仅在现场发现行踪诡异的安室透，毛利小五郎更是惨遭陷害。面对最危险任务，最烧脑的推理，最艰难的博弈，柯南能否在迷雾中寻找到唯一的真相。'
+                // }
             ]
         }
     },
     mounted () {
-        window.scrollTo(0,document.getElementById('chat').scrollHeight)
+        this.getMessages()
     },
     methods: {
         sortByTime(a, b) {
-            return new Date(a.add_time) - new Date(b.add_time)
+            // console.log(a,b, new Date(a.add_time))
+            return new Date(a.time) - new Date(b.time)
         },
         getMessages() {
-            axios.get('/problem').then(rsp => {
-                rsp.map(v => {
-                    return {
-                        self: false,
-                        name: v.student_name,
-                        avatar: v.head_img,
-                        time: v.add_time,
-                        body: problem
-                    }
-                }).forEach(v => this.messages.append(v))
-            })
-            axios.get('/answer').then(rsp => {
-                rsp.map(v => {
-                    return {
-                        self: false,
-                        name: v.teacher_name,
-                        avatar: v.head_img,
-                        time: v.add_time,
-                        body: problem
-                    }
-                }).forEach(v => this.messages.append(v))
-            })
-            this.messages.sort(this.sortByTime)
+            axios.all([axios.get('/problem/'), axios.get('/answer_teacher/')])
+                .then(axios.spread((r1, r2) => {
+                    console.log(r1,[r2.data])
+                    r1.data.map(v => {
+                        return {
+                            self: false,
+                            name: v.student_name,
+                            avatar: v.head_img,
+                            time: v.add_time,
+                            body: v.problem
+                        }
+                    }).forEach(v => this.messages.push(v))
+                    let r3=r2.data
+                    r3.map(v => {
+                        return {
+                            self: true,
+                            name: v.teacher_name,
+                            avatar: v.head_img,
+                            time: v.add_time,
+                            body: v.answer
+                        }
+                    }).forEach(v => this.messages.push(v))
+                    this.messages.sort(this.sortByTime)
+                    console.log(this.messages)
+                    this.messages.forEach(v => {
+                        let time = new Date(v.time)
+                        v.time = `${time.getFullYear()}年${time.getMonth()+1}月${time.getDate()}日 ${time.getHours()}:${time.getMinutes()}`
+                    })
+                    window.scrollTo(0,document.getElementById('chat').scrollHeight)
+                }))
         },
         addMessage() {
             let time = new Date()
-            this.messages.push({
-                self: true,
-                name: this.selfName,
-                avatar: this.selfAvatar,
-                time: `${time.getFullYear()}年${time.getMonth()+1}月${time.getDate()}日 ${time.getHours()}:${time.getMinutes()}`,
-                body: this.text
+            axios.post('/answer/', {
+                'teacher_name': this.selfName,
+                'head_img': this.selfAvatar,
+                'answer': this.text
+            }).then(r => {
+                this.messages.push({
+                    self: true,
+                    name: this.selfName,
+                    avatar: this.selfAvatar,
+                    time: `${time.getFullYear()}年${time.getMonth()+1}月${time.getDate()}日 ${time.getHours()}:${time.getMinutes()}`,
+                    body: this.text
+                })
+                this.text = ''
+                setTimeout(() => window.scrollTo({
+                    top: document.getElementById('chat').scrollHeight,
+                    behavior: 'smooth'
+                }), 50)
+                console.log(r)     
             })
-            this.text = ''
-            setTimeout(() => window.scrollTo({
-                top: document.getElementById('chat').scrollHeight,
-                behavior: 'smooth'
-            }), 50)
         }
     }
 }
@@ -178,6 +186,7 @@ p {
     background: #ffffff;
     border-radius: 0.5rem;
     padding: 0.5rem;
+    word-wrap: break-word;
 }
 #input {
     position: fixed;
@@ -189,7 +198,7 @@ p {
     display: flex;
 }
 #input>textarea {
-    font-size: 1rem;
+    font-size: 2rem;
     min-height: 1rem;
     height: 80%;
     max-height: 11rem;
@@ -200,9 +209,13 @@ p {
     width: 72%;
     border: none;
     border-bottom: #969390 1px solid;
+    word-wrap: break-word;
 }
-#input>pre{
+#input>p{
     display: block;
+    width: 95%;
+    font-size: 2rem;
+    word-wrap: break-word;
     visibility: hidden;
 }
 #button {

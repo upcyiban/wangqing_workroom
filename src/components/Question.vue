@@ -28,12 +28,13 @@ export default {
     },
     methods: {
         submit () {
-            axios.post('/problem', {
+            axios.post('/problem/', {
                 'student_name': '',
                 'problem': this.problem,
                 'head_img': ''
-            }).then({
-                
+            }).then(r => {
+                console.log(r)
+                // this.$router.push()
             })
         }
     }

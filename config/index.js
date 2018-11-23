@@ -6,11 +6,32 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/problem/': {
+        target: 'http://yb.upc.edu.cn:8086',
+        changeOrigin: true,
+        pathRewrite: {
+          ' ^/problem/' : '/problem'
+        }
+      },
+      '/answer/': {
+        target: 'http://yb.upc.edu.cn:8086',
+        changeOrigin: true,
+        pathRewrite: {
+          ' ^/answer/' : '/answer'
+        }
+      },
+      '/answer_teacher/': {
+        target: 'http://yb.upc.edu.cn:8086',
+        changeOrigin: true,
+        pathRewrite: {
+          ' ^/answer_teacher/' : '/answer_teacher'
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
