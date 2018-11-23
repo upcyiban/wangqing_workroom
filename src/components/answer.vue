@@ -20,7 +20,9 @@
         <img id="askimg" src="../assets/question.png" width="80px" height="80px">
        <p style="transform:translateY(-8px);"> 我要提问</p>
       </div>
-      
+     <div class="question" v-show="isteacher">
+      问题列表<img style="transform:translateY(5px);" src="../assets/questionlist.png" width="25px" height="25px">
+    </div>
   </div>
 </template>
 
@@ -35,19 +37,15 @@ export default {
       num:'',
       cnt:'',
       id:'',
-      imgurl:''
+      imgurl:'',
+      identity:'',
+      isteacher:false
     };
   },
   created(){
     this.getOneAnswer()
-    //this.getinfo()
   },
   methods:{
-    getinfo:function(){
-      this.$axios.post('http://yb.upc.edu.cn:8086/info/').then(response=>{
-        console.log(response.data)
-      })
-    },
     dianzan:function(){
       this.islike=!this.islike
       console.log(this.id)
@@ -83,8 +81,11 @@ export default {
         this.name = response.data.teacher_name
         this.cnt = response.data.count
         this.imgurl = response.data.head_img
-        console.log(this.imgurl)
-        console.log(this.cnt)
+        this.identity=window.localStorage.getItem('identity')
+        if(this.identity=="老师")
+        {
+          this.isteacher=true
+        }
         this.id = response.data.id
       }).catch(error => {
         console.log(error)
@@ -99,6 +100,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.question{
+  position: absolute;
+  margin-left:35%;
+  margin-top:140%;
+  background-color: white;
+  border-radius: 25px;
+  padding-bottom:1%;
+  padding-left:2%;
+  padding-right:2%;
+
+}
 #dianzannum{
   margin-top:102%;
   position: absolute;
