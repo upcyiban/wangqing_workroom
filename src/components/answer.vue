@@ -1,8 +1,9 @@
 <template>
   <div class="answer">
+     <img id="background" :src="require('@/assets/background.jpg')">
       <div class="answer_top">
         <div class="photo">
-          <img :src="imgurl" width="80px" height="80px" >
+          <img id="image" :src="imgurl" width="80px" height="80px" >
          </div>
            <div class="answer_title">
            {{ name }}老师回复：
@@ -27,15 +28,16 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "Answer",
   data() {
     return {
-      msg: "  张玲玲介绍学校基础建设、一流学科师资队伍、人才培养、科研实速回张玲玲张玲玲介绍学校基础建设、一流学科师资队伍、人才培养、科研实速回张玲玲介绍学校基础建设、一流学科师资队伍、人才培养、科研实速回张玲玲介绍学校基础建设、一流学科师资队伍、人才培养、科研实速回。",
-      name: "王青",
-      islike:'',
+      msg: "",
+      name: "",
+      islike:false,
       num:'',
-      cnt:'',
+      cnt:'1',
       id:'',
       imgurl:'',
       identity:'',
@@ -52,13 +54,10 @@ export default {
       if(this.islike==false)
       {
         this.islike=true
-        window.localStorage.setItem('islike',true)
          console.log(this.id)
-         console.log(this.islike)
-      console.log(parseInt(this.cnt))
       var count=this.cnt
        count=count+1
-        this.$axios.get('http://yb.upc.edu.cn:8086/count/?answer_id='+this.id+'&yb_id='+this.student+'&count='+this.cnt
+        this.$axios.get('http://yb.upc.edu.cn:8086/count/?answer_id='+this.id+'&yb_id='+this.student+'&count='+count
 ).then(response=>{
         console.log(response)
         this.$axios.get('http://yb.upc.edu.cn:8086/answer/').then(response=>{
@@ -79,7 +78,6 @@ export default {
         dataType:'json',
         
       }).then(response=>{
-        console.log(response.data)
         this.msg = response.data.answer
         this.name = response.data.teacher_name
         this.cnt = response.data.count
@@ -92,12 +90,23 @@ export default {
           this.isteacher=true
         }
         this.id = response.data.id
+
+         axios.post('http://yb.upc.edu.cn:8086/count/',{
+        'answer_id': this.id,
+        'yb_id': this.student
+      }).then(response=>{
+        console.log(response.data)
+        if(response.data=="unlike")
+        {
+          this.islike=false
+        }else{
+          this.islike=true
+        }
+      })
       }).catch(error => {
         console.log(error)
       })
-      this.$axios.get('http://yb.upc.edu.cn:8086/teacher_head_img/').then(response=>{
-        console.log(response.data)
-      })
+     
     }
   }
 };
@@ -105,6 +114,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#image{
+  border-radius: 50px;
+}
 a{
   text-decoration: none;
   color: black;
@@ -112,8 +124,7 @@ a{
 .question{
   color: black;
   position: absolute;
-  margin-left:35%;
-  margin-top:140%;
+  margin-left:65%;
   background-color: white;
   border-radius: 25px;
   padding-bottom:1%;
@@ -122,20 +133,21 @@ a{
 
 }
 #dianzannum{
-  margin-top:102%;
   position: absolute;
-  margin-left: 78%;
+  margin-top:108%;
+  margin-left: 85%;
   color: black;
+  z-index: 999;
 }
 #like{
-  margin-top:400px;
-  margin-left: 300px;
+  margin-top:102%;
+  margin-left: 78%;
   position: absolute;
   z-index: 888;
 }
 #dislike{
-  margin-top:400px;
-  margin-left: 300px;
+  margin-top:102%;
+  margin-left: 78%;
   position: absolute;
   z-index: 888;
   opacity: 0.5;
@@ -192,6 +204,13 @@ a{
 
   font-size: 15px
 }
+#background {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
 .photo {
   width: 80px;
   height: 80px;
@@ -202,9 +221,6 @@ a{
   position: absolute;
   z-index: 999;
   }
-img {
-  border-radius: 50px;
-}
 .answer {
   background-image: url(../assets/background.jpg);
   background-size: cover;

@@ -1,50 +1,75 @@
 <template>
   <div class="homepage">
+     <img id="background" :src="require('@/assets/background.jpg')">
     <router-link to="questionList" ><div class="question" v-show="isteacher">
       问题列表<img style="transform:translateY(5px);" src="../assets/questionlist.png" width="25px" height="25px"/>
     </div></router-link>
     <div>
        <div class="photo first">
-          <img :src="teacher[2].head_img" width="80px" height="80px" >
+          <img id="image" :src="teacher[0].head_img" width="80px" height="80px" >
        </div>
        <div class="nameshuo first">
-         {{ teacher[2].teacher_name }}老师
+         {{ teacher[0].teacher_name }}老师
        </div>
        <div class="photo second">
-          <img :src="teacher[3].head_img" width="80px" height="80px" >
+          <img id="image" :src="teacher[1].head_img" width="80px" height="80px" >
        </div>
        <div class="nameshuo second">
-         {{ teacher[3].teacher_name }}老师
+         {{ teacher[1].teacher_name }}老师
        </div>
         <div class="photo third">
-          <img :src="teacher[4].head_img" width="80px" height="80px" >
+          <img id="image" :src="teacher[2].head_img" width="80px" height="80px" >
        </div>
        <div class="nameshuo third">
-         {{ teacher[4].teacher_name }}老师
+         {{ teacher[2].teacher_name }}老师
        </div>
         <div class="photo fourth">
-          <img :src="teacher[5].head_img" width="80px" height="80px" >
+          <img id="image" :src="teacher[3].head_img" width="80px" height="80px" >
        </div>
        <div class="nameshuo fourth">
-         {{ teacher[5].teacher_name }}老师
+         {{ teacher[3].teacher_name }}老师
        </div>
         <div class="photo fiveth">
-          <img :src="teacher[6].head_img" width="80px" height="80px" >
+          <img id="image" :src="teacher[4].head_img" width="80px" height="80px" >
        </div>
        <div class="nameshuo fiveth">
-         {{ teacher[6].teacher_name }}老师
+         {{ teacher[4].teacher_name }}老师
        </div>
        <div class="photo sixth">
-          <img :src="teacher[7].head_img" width="80px" height="80px" >
+          <img id="image" :src="teacher[5].head_img" width="80px" height="80px" >
        </div>
        <div class="nameshuo sixth">
-         {{ teacher[7].teacher_name }}老师
+         {{ teacher[5].teacher_name }}老师
        </div>
         <div class="photo seventh">
-          <img :src="teacher[8].head_img" width="80px" height="80px" >
+          <img id="image" :src="teacher[6].head_img" width="80px" height="80px" >
        </div>
        <div class="nameshuo seventh">
+         {{ teacher[6].teacher_name }}老师
+       </div>
+        <div class="photo eightth">
+          <img id="image" :src="teacher[7].head_img" width="80px" height="80px" >
+       </div>
+       <div class="nameshuo eightth">
+         {{ teacher[7].teacher_name }}老师
+       </div>
+        <div class="photo nineth">
+          <img id="image" :src="teacher[8].head_img" width="80px" height="80px" >
+       </div>
+       <div class="nameshuo nineth">
          {{ teacher[8].teacher_name }}老师
+       </div>
+       <div class="photo tenth">
+          <img id="image" :src="teacher[9].head_img" width="80px" height="80px" >
+       </div>
+       <div class="nameshuo tenth">
+         {{ teacher[9].teacher_name }}老师
+       </div>
+              <div class="photo eleventh">
+          <img id="image" :src="teacher[10].head_img" width="80px" height="80px" >
+       </div>
+       <div class="nameshuo eleventh">
+         {{ teacher[10].teacher_name }}老师
        </div>
     </div>
       <router-link to="question"><div class="ask">
@@ -70,19 +95,36 @@ export default {
   created(){
     this.getinfo()
     this.getteacher()
-    //this.getOneAnswer()
+
   },
   methods:{
     getinfo:function(){
-    let location=window.location.href
-    let data=location.split(/[?=&]/)
-    this.vq=data[2]
-    console.log(this.vq)
+      if(window.sessionStorage.getItem('vq')=='undefined'||sessionStorage.getItem('vq')==null)
+      {
+         let location=window.location.href
+          let data=location.split(/[?=&]/)
+          this.vq= data[2]
+          if(this.vq.length<350)
+          {
+            this.$router.push('/')
+          }else{
+             window.sessionStorage.setItem('vq',this.vq)
+          }
+
+          console.log(this.vq.length)
+      }else{
+        this.vq=sessionStorage.getItem('vq')
+         if(this.vq.length<350)
+          {
+            this.$router.push('/')
+          }
+        console.log(this.vq.length)
+      }
+   
     this.$axios({
       url:'http://yb.upc.edu.cn:8086/info/?vq='+this.vq
     }).then(response=>{
       console.log(response.data)
-      window.localStorage.setItem('student_name',response.data.yb_username)
       window.localStorage.setItem('head_img',response.data.yb_userhead)
       window.localStorage.setItem('identity',response.data.yb_identity)
       window.localStorage.setItem('yb_id',response.data.yb_userid)
@@ -91,12 +133,15 @@ export default {
         if(this.identity=="老师")
         {
           this.isteacher=true
-          console.log(this.isteacher)
+          window.localStorage.setItem('teacher_name',response.data.yb_realname)
+        }else{
+          window.localStorage.setItem('student_name',response.data.yb_username)
         }
 
     })
     if(window.localStorage.getItem('islike')==undefined)
        window.localStorage.setItem('islike',false)
+    this.getOneAnswer()
     },
     dianzan:function(){
       this.islike=!this.islike
@@ -106,6 +151,7 @@ export default {
         url:"http://yb.upc.edu.cn:8086/teacher_head_img/"
       }).then(response=>{
         this.teacher = response.data
+        console.log(this.teacher)
       })
     },
     getOneAnswer:function(){
@@ -125,14 +171,26 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#image{
+  border-radius: 50px;
+}
+#background {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    overflow: hidden;
+    z-index: -1;
+}
 a{
   text-decoration: none;
   color: black;
 }
 .question{
   position: absolute;
-  margin-left:35%;
-  margin-top:140%;
+  margin-left:68%;
+  margin-top:3%;
   background-color: white;
   border-radius: 25px;
   padding-bottom:1%;
@@ -168,31 +226,47 @@ a{
 }
 .first{
   margin-left: 12%;
-  transform: translateY(110px);
+  transform: translateY(30px);
 }
 .second{
-  margin-left:65%;
-  transform: translateY(80px);
+  margin-left:70%;
+  transform: translateY(50px);
 }
 .third{
   margin-left: 40%;
-  transform: translateY(100px);
+  transform: translateY(80px);
 }
 .fourth{
   margin-left:5%;
-  transform: translateY(250px);
+  transform: translateY(150px);
 }
 .fiveth{
   margin-left:70%;
- transform: translateY(240px);
+ transform: translateY(180px);
 }
 .sixth{
-  margin-left:25%;
-  transform: translateY(400px);
+  margin-left:7%;
+  transform: translateY(280px);
 }
 .seventh{
-  margin-left: 60%;
-  transform: translateY(350px);
+  margin-left: 72%;
+  transform: translateY(300px);
+}
+.nineth{
+  margin-left: 40%;
+  transform: translateY(400px);
+}
+.eightth{
+  margin-left: 70%;
+  transform: translateY(430px);
+}
+.tenth{
+  margin-left: 10%;
+  transform: translateY(410px);
+}
+.eleventh{
+  margin-left: 40%;
+  transform: translateY(500px);
 }
 .ask{
   position: absolute;
@@ -202,21 +276,18 @@ a{
   background-color: white;
   border-radius: 70px;
   z-index: 999;
-  margin-left: 29%;
+  margin-left: 31%;
   text-align: center;
   transform: translateY(-50px);
   color: black;
 
-}
-img {
-  border-radius: 50px;
 }
 #askimg{
    transform: translateY(15px)
 }
 
 .homepage {
-  background-image: url(../assets/background.jpg);
+  background-image: url("../assets/background.jpg");
   background-size: cover;
   top:0;
   height: 720px;

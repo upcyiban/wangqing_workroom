@@ -62,7 +62,7 @@ export default {
             return new Date(a.time) - new Date(b.time)
         },
         getMessages() {
-            axios.all([axios.get('/problem/'), axios.get('/answer_teacher/')])
+            axios.all([axios.get('http://yb.upc.edu.cn:8086/problem/'), axios.get('http://yb.upc.edu.cn:8086/answer_teacher/')])
                 .then(axios.spread((r1, r2) => {
                     console.log(r1,[r2.data])
                     r1.data.map(v => {
@@ -94,10 +94,11 @@ export default {
                 }))
         },
         addMessage() {
+            this.selfName=window.localStorage.getItem('teacher_name')
             let time = new Date()
-            axios.post('/answer/', {
+            axios.post('http://yb.upc.edu.cn:8086/answer/', {
                 'teacher_name': this.selfName,
-                'head_img': this.selfAvatar,
+                'head_img': localStorage.head_img,
                 'answer': this.text
             }).then(r => {
                 this.messages.push({

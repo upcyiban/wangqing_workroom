@@ -23,17 +23,25 @@ export default {
     name: 'Question',
     data () {
         return {
-            problem: ''
+            problem: '',
+            name:''
         }
     },
     methods: {
         submit () {
-            axios.post('/problem/', {
-                'student_name': '',
+            if(window.localStorage.student_name==null)
+            {
+                this.name=localStorage.teacher_name
+            }else{
+                this.name=localStorage.student_name
+            }
+            axios.post('http://yb.upc.edu.cn:8086/problem/', {
+                'student_name': this.name,
                 'problem': this.problem,
-                'head_img': ''
+                'head_img': localStorage.head_img
             }).then(r => {
-                console.log(r)
+                alert("提交成功！")
+                this.$router.push('/homepage')
                 // this.$router.push()
             })
         }
