@@ -79,6 +79,7 @@ export default {
     line-height: 3rem;
 }
 #text {
+    display: inline-block;
     margin-top: 15%;
     height: 25%;
     width: 100%;

@@ -39,8 +39,8 @@ export default {
     name: 'QuestionList',
     data () {
         return {
-            selfAvatar: require('@/assets/8.jpg'),
-            selfName: '鱼',
+            selfAvatar: localStorage.head_img,
+            selfName: localStorage.teacher_name,
             text: '',
             messages: [
                 // {
@@ -94,11 +94,10 @@ export default {
                 }))
         },
         addMessage() {
-            this.selfName=window.localStorage.getItem('teacher_name')
             let time = new Date()
             axios.post('http://yb.upc.edu.cn:8086/answer/', {
                 'teacher_name': this.selfName,
-                'head_img': localStorage.head_img,
+                'head_img': this.selfAvatar,
                 'answer': this.text
             }).then(r => {
                 this.messages.push({
