@@ -134,8 +134,8 @@ a{
 }
 #dianzannum{
   position: absolute;
-  margin-top:108%;
-  margin-left: 85%;
+  margin-top:107%;
+  margin-left: 84%;
   color: black;
   z-index: 999;
 }
@@ -208,8 +208,8 @@ a{
     position: absolute;
     top: 0;
     width: 100%;
-    height: 100%;
     z-index: -1;
+    background-size: 100% 100%;
 }
 .photo {
   width: 80px;
@@ -223,7 +223,7 @@ a{
   }
 .answer {
   background-image: url(../assets/background.jpg);
-  background-size: cover;
+  background-size: 100% 100%;
   top:0;
   height: 720px;
 }
