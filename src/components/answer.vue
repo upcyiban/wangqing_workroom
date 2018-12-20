@@ -208,6 +208,7 @@ a{
     position: absolute;
     top: 0;
     width: 100%;
+    height: 100%;
     z-index: -1;
     background-size: 100% 100%;
 }
@@ -225,7 +226,6 @@ a{
   background-image: url(../assets/background.jpg);
   background-size: 100% 100%;
   top:0;
-  height: 720px;
 }
 h1,
 h2 {
