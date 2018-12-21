@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="answer_content">
-        <br><br>&nbsp;&nbsp;&nbsp;&nbsp;{{ msg }}
+        <div class="content"><br><br>&nbsp;&nbsp;&nbsp;&nbsp;{{ msg }}</div>
       </div>
       <div>
         <img v-show="!islike" @click="dianzan()" id="dislike" src="../assets/dislike.png" width="50px" height="50px">
@@ -182,6 +182,16 @@ a{
   padding-top: 5%;
   width: 90%;
 
+}
+.content{
+ background-color:whitesmoke;
+  color:black;
+  position: absolute;
+  z-index: 1;
+  height: 300px;
+  width: 90%;
+  overflow-y: scroll;
+  margin-top: 5%;
 }
 .answer_top{
   margin-left: 20px;
