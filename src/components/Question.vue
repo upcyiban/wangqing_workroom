@@ -60,7 +60,7 @@ export default {
 #top {
     position: absolute;
     right: 2rem;
-    top: -1.5rem;
+    margin-top: 12%;
     text-align: center;
     background: #ffffff;
     border-radius: 2rem;
