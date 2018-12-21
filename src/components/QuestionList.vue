@@ -88,7 +88,7 @@ export default {
                     console.log(this.messages)
                     this.messages.forEach(v => {
                         let time = new Date(v.time)
-                        v.time = `${time.getFullYear()}年${time.getMonth()+1}月${time.getDate()}日 ${time.getHours()}:${time.getMinutes()}`
+                        v.time = `${time.getFullYear()}年${time.getMonth()+1}月${time.getDate()}日 ${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`
                     })
                     window.scrollTo(0,document.getElementById('chat').scrollHeight)
                 }))
@@ -199,6 +199,10 @@ p {
 }
 #input>textarea {
     font-size: 2rem;
+    font-family: Arial, "Times New Roman", 
+             "Microsoft YaHei", "微软雅黑", 
+             STXihei, "华文细黑", 
+             serif;
     min-height: 1rem;
     height: 80%;
     max-height: 11rem;
@@ -213,8 +217,12 @@ p {
 }
 #input>p{
     display: block;
-    width: 95%;
+    width: 72%;
     font-size: 2rem;
+    font-family: Arial, "Times New Roman", 
+             "Microsoft YaHei", "微软雅黑", 
+             STXihei, "华文细黑", 
+             serif;
     word-wrap: break-word;
     visibility: hidden;
 }
