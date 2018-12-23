@@ -26,8 +26,8 @@
     <router-link to="questionList" ><div class="question" v-show="isteacher">
       问题列表<img style="transform:translateY(5px);" src="../assets/questionlist.png" width="25px" height="25px">
     </div></router-link>
-    <router-link to ="secret"><div class="question" v-show="!isteacher">
-      私密回复<img style="transform:translateY(5px);" src="../assets/questionlist.png" width="25px" height="25px">
+     <router-link to="answer"><div class="question"  v-show="!isteacher">
+      公开回复<img style="transform:translateY(5px);" src="../assets/questionlist.png" width="25px" height="25px">
     </div></router-link>
   </div>
 </template>
@@ -98,14 +98,20 @@ export default {
     getOneAnswer:function(){
       this.$axios({
         // methods:'get',
-        url:'http://yb.upc.edu.cn:8086/answer_teacher/',
+        url:'http://yb.upc.edu.cn:8086/secret/?student_head_url='+localStorage.getItem('head_img'),
         headers:{
           'Content-Type':'application/json'
         },
         dataType:'json',
         
       }).then(response=>{
-        console.log(response.data)
+        if(response.data=="no")
+        {
+          alert("暂时还没有私密回复，老师们可能在忙，请耐心等待噢")
+          this.$router.push('answer')
+        }else
+        {
+         console.log(response.data)
         this.answers = response.data
         this.imgurl = this.answers[this.index].head_img
         this.cnt = this.answers[this.index].count
@@ -116,6 +122,8 @@ export default {
         {
           this.isteacher=true
         }
+        }
+
       })
       this.getIfCount()
     },

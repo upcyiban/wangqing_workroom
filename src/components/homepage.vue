@@ -4,6 +4,9 @@
     <router-link to="questionList" ><div class="question" v-show="isteacher">
       问题列表<img style="transform:translateY(5px);" src="../assets/questionlist.png" width="25px" height="25px"/>
     </div></router-link>
+    <div class="question" v-show="!isteacher">
+      私密回复<img style="transform:translateY(5px);" src="../assets/questionlist.png" width="25px" height="25px">
+    </div>
     <div>
        <div class="photo first">
           <img id="image" :src="teacher[0].head_img" width="80px" height="80px" >

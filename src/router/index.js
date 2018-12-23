@@ -5,6 +5,7 @@ import QuestionList from '@/components/QuestionList'
 import Answer from '@/components/answer'
 import Homepage from '@/components/homepage'
 import Auth from'@/components/yibanauth'
+import Secret from'@/components/secretanswer'
 
 Vue.use(Router)
 
@@ -14,6 +15,11 @@ export default new Router({
       path: '/',
       name: 'Auth',
       component: Auth
+    },
+    {
+      path:'/secret',
+      name:'Secret',
+      component: Secret
     },
     {
       path:'/answer',
