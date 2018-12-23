@@ -181,19 +181,20 @@ a{
 }
 #dianzannum{
   position: absolute;
-  margin-top:107%;
+  margin-top:108%;
   margin-left: 84%;
   color: black;
   z-index: 999;
+  height: 20px;
 }
 #like{
-  margin-top:102%;
+  margin-top:103%;
   margin-left: 78%;
   position: absolute;
   z-index: 888;
 }
 #dislike{
-  margin-top:102%;
+  margin-top:103%;
   margin-left: 78%;
   position: absolute;
   z-index: 888;

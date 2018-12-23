@@ -10,15 +10,10 @@
         </div>
       </div>
       <div class="answer_content">
-        <div class="content"><br><br>&nbsp;&nbsp;&nbsp;&nbsp;{{ answers[index].answer }}<br></div>
+        <div class="content"><br><br>&nbsp;&nbsp;&nbsp;&nbsp;{{ answers[index].secret_answer }}<br></div>
       </div>
     <div class="last"><p  @click="goLast()">上一条</p></div>
     <div class="next"><p  @click="goNext()">下一条</p></div>
-      <div>
-        <img v-show="!islike" @click="dianzan()" id="dislike" src="../assets/dislike.png" width="50px" height="50px">
-        <img v-show="islike" @click="dianzan()" id="like" src="../assets/like.png" width="50px" height="50px">
-      </div>
-      <p id="dianzannum" @click="dianzan()">{{ cnt }}</p>
        <router-link to="question"><div class="ask">
         <img id="askimg" src="../assets/question.png" width="80px" height="80px">
         <p style="transform:translateY(-8px);"> 我要提问</p>
@@ -81,7 +76,7 @@ export default {
         this.index = this.index+1;
       }
       this.getIfCount()
-       this.imgurl = this.answers[this.index].head_img
+       this.imgurl = this.answers[this.index].teacher_head_url
         this.cnt = this.answers[this.index].count
     },
     goNext:function(){
@@ -113,8 +108,7 @@ export default {
         {
          console.log(response.data)
         this.answers = response.data
-        this.imgurl = this.answers[this.index].head_img
-        this.cnt = this.answers[this.index].count
+        this.imgurl = this.answers[this.index].teacher_head_url
         this.identity=window.localStorage.getItem('identity')
         this.student=window.localStorage.getItem('yb_id')
         this.islike=window.localStorage.getItem('islike')
@@ -195,13 +189,13 @@ a{
   z-index: 999;
 }
 #like{
-  margin-top:102%;
+  margin-top:105%;
   margin-left: 78%;
   position: absolute;
   z-index: 888;
 }
 #dislike{
-  margin-top:102%;
+  margin-top:105%;
   margin-left: 78%;
   position: absolute;
   z-index: 888;
