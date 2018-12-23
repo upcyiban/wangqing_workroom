@@ -167,7 +167,7 @@ a{
   color: black;
   opacity: 0.7;
   font-weight: 800;
-  height: 200px;
+  height: 20px;
   z-index: 999;
 }
 .question{
