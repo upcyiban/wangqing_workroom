@@ -149,9 +149,10 @@ export default {
                     name: this.selfName,
                     avatar: this.selfAvatar,
                     time: `${time.getFullYear()}年${time.getMonth()+1}月${time.getDate()}日 ${time.getHours()}:${time.getMinutes()}`,
-                    body: this.text
+                    body: this.replyTo ? `@${this.replyTo} ${this.text}` : this.text
                 })
                 this.text = ''
+                this.cancelReplyTo()
                 // setTimeout(function() {
                 //     window.scrollTo({
                 //         top: document.getElementById('chat').scrollHeight,
@@ -166,6 +167,7 @@ export default {
         },
         cancelReplyTo () {
             this.replyTo = false
+            this.replyHeadImage = ''
         }
     }
 }
@@ -266,7 +268,7 @@ p {
     /* font-size: 1.1rem; */
 }
 #input>textarea {
-    font-size: 2rem;
+    font-size: 1rem;
     font-family: Arial, "Times New Roman", 
              "Microsoft YaHei", "微软雅黑", 
              STXihei, "华文细黑", 
@@ -286,12 +288,13 @@ p {
 #input>p{
     display: block;
     width: 72%;
-    font-size: 2rem;
+    font-size: 1rem;
     font-family: Arial, "Times New Roman", 
              "Microsoft YaHei", "微软雅黑", 
              STXihei, "华文细黑", 
              serif;
     word-wrap: break-word;
+    /* transform: translateY(-100%); */
     visibility: hidden;
 }
 #button {
